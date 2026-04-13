@@ -114,9 +114,9 @@
     </dependencies>
 
     <modules>
-        <module>ultimateantibot-common</module>
-        <module>ultimateantibot-spigot</module>
-        <module>ultimateantibot-bungeecord</module>
-        <module>ultimateantibot-velocity</module>
+        <module>UltimateAntibot-common</module>
+        <module>UltimateAntibot-spigot</module>
+        <module>UltimateAntibot-bungeecord</module>
+        <module>UltimateAntibot-velocity</module>
     </modules>
 </project>
