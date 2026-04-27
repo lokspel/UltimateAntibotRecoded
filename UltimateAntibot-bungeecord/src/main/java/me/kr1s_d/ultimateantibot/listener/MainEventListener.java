@@ -187,6 +187,21 @@ public class MainEventListener implements Listener {
         String nickname = player.getName();
         String ip = Utils.getIP(player);
         //
+        //BlackList Check Fallback
+        //
+        if (blackListService.isBlackListed(ip)) {
+            plugin.disconnect(ip, MessageManager.getBlacklistedMessage(blackListService.getProfile(ip)));
+            return;
+        }
+        //
+        //FirstJoin Check Fallback
+        //
+        if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
+            userDataService.getProfile(ip).setFirstJoin(false);
+            plugin.disconnect(ip, MessageManager.firstJoinMessage);
+            return;
+        }
+        //
         //Packet Check
         //
         packetCheck.registerJoin(ip);

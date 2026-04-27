@@ -169,7 +169,7 @@ public class MainEventListener {
         //
         //FirstJoinCheck
         //
-        if (firstJoinCheck.isDenied(ip, name)) {
+        if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
             e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.firstJoinMessage)));
             return;
         }
@@ -180,6 +180,22 @@ public class MainEventListener {
         Player player = e.getPlayer();
         String nickname = player.getUsername();
         String ip = Utils.getIP(player);
+        //
+        //BlackList Check Fallback
+        //
+        if (blackListService.isBlackListed(ip)) {
+            plugin.disconnect(ip, MessageManager.getBlacklistedMessage(blackListService.getProfile(ip)));
+            return;
+        }
+
+        //
+        //FirstJoin Check Fallback
+        //
+        if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
+            userDataService.getProfile(ip).setFirstJoin(false);
+            plugin.disconnect(ip, MessageManager.firstJoinMessage);
+            return;
+        }
         //
         //Packet Check
         //
