@@ -96,6 +96,7 @@ public class MainEventListener {
 		            return;
 		        }
 		        if (whitelistService.isWhitelisted(ip)) {
+		        	firstJoinCheck.isDenied(ip, name);
 		            antiBotManager.getDynamicJoins().decrease();
 		            return;
 		        }
