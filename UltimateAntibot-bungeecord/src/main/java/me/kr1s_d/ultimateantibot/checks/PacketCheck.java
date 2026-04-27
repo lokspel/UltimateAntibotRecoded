@@ -11,6 +11,7 @@ import me.kr1s_d.ultimateantibot.utils.Utils;
 import net.md_5.bungee.api.ProxyServer;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class PacketCheck {
     private final IAntiBotPlugin iAntiBotPlugin;
