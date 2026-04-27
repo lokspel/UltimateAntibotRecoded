@@ -198,10 +198,10 @@ public class MainEventListener implements Listener {
         //
         //FirstJoin Check Fallback
         //
-        if (whitelistService.isWhitelisted(ip) && userDataService.getProfile(ip).isFirstJoin()) {
-            userDataService.getProfile(ip).setFirstJoin(false);
-        } else if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
-            userDataService.getProfile(ip).setFirstJoin(false);
+        if (whitelistService.isWhitelisted(ip)) {
+            // Consume the first-join state without denying whitelisted players.
+            firstJoinCheck.isDenied(ip, nickname);
+        } else if (firstJoinCheck.isDenied(ip, nickname)) {
             plugin.disconnect(ip, MessageManager.firstJoinMessage);
             return;
         }
