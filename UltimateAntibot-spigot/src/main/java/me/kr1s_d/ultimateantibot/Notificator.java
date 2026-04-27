@@ -10,12 +10,12 @@ import me.kr1s_d.ultimateantibot.utils.Utils;
 import me.kr1s_d.ultimateantibot.utils.Version;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Notificator implements INotificator {
-    private static final List<Player> actionbars = new ArrayList<>();
-    private static final List<Player> titles = new ArrayList<>();
+    private static final List<Player> actionbars = new CopyOnWriteArrayList<>();
+    private static final List<Player> titles = new CopyOnWriteArrayList<>();
     private static final KBossBar bar = new KBossBar();
 
     public static void automaticNotification(Player player) {

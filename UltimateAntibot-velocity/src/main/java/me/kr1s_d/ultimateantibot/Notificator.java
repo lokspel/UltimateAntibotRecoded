@@ -10,13 +10,13 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.title.Title;
 import net.kyori.adventure.title.TitlePart;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Notificator implements INotificator {
-    private static final List<Player> actionbars = new ArrayList<>();
-    private static final List<Player> titles = new ArrayList<>();
-    private static final List<Player> bar = new ArrayList<>();
+    private static final List<Player> actionbars = new CopyOnWriteArrayList<>();
+    private static final List<Player> titles = new CopyOnWriteArrayList<>();
+    private static final List<Player> bar = new CopyOnWriteArrayList<>();
     private static final BossBar BOSS = BossBar.bossBar(Utils.colora("&fWaiting for a new attack!"), 1, BossBar.Color.RED, BossBar.Overlay.PROGRESS);
 
     public static void automaticNotification(Player player) {

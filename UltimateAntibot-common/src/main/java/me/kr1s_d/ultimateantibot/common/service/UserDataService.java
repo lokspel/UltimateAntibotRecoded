@@ -16,6 +16,7 @@ import me.kr1s_d.ultimateantibot.common.utils.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class UserDataService implements IService {
         this.logHelper = plugin.getLogHelper();
         this.profiles = Caffeine.newBuilder()
                 .build();
-        this.onlineProfiles = new ArrayList<>();
+        this.onlineProfiles = new CopyOnWriteArrayList<>();
     }
 
     @Override

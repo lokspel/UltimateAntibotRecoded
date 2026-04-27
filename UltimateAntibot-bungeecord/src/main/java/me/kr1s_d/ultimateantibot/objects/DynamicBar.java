@@ -1,6 +1,5 @@
 package me.kr1s_d.ultimateantibot.objects;
 
-import com.google.common.collect.Sets;
 import me.kr1s_d.ultimateantibot.common.BarColor;
 import me.kr1s_d.ultimateantibot.common.BarStyle;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
@@ -15,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DynamicBar {
@@ -29,7 +29,7 @@ public class DynamicBar {
         private boolean visible = true;
         private boolean checkBrokenBar = false;
 
-        private final Set<ProxiedPlayer> players = Sets.newHashSet();
+        private final Set<ProxiedPlayer> players = new CopyOnWriteArraySet<>();
 
         public DynamicBar(String title, BarColor barColor, BarStyle barStyle) {
             this.uuid = UUID.nameUUIDFromBytes(("BBB:" + barID.getAndIncrement()).getBytes(StandardCharsets.UTF_8));

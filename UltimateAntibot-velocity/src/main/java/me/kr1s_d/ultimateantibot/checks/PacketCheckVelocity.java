@@ -11,6 +11,7 @@ import me.kr1s_d.ultimateantibot.common.utils.MessageManager;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class PacketCheckVelocity {
     private final IAntiBotPlugin iAntiBotPlugin;
@@ -23,9 +24,9 @@ public class PacketCheckVelocity {
 
     public PacketCheckVelocity(IAntiBotPlugin plugin) {
         this.iAntiBotPlugin = plugin;
-        this.joined = new HashSet<>();
-        this.packetReceived = new HashSet<>();
-        this.suspected = new HashSet<>();
+        this.joined = new CopyOnWriteArraySet<>();
+        this.packetReceived = new CopyOnWriteArraySet<>();
+        this.suspected = new CopyOnWriteArraySet<>();
         this.antibotManager = plugin.getAntiBotManager();
         this.blacklist = plugin.getAntiBotManager().getBlackListService();
         this.whitelistService = plugin.getAntiBotManager().getWhitelistService();

@@ -14,12 +14,12 @@ import net.md_5.bungee.api.Title;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Notificator implements INotificator {
-    private static final List<ProxiedPlayer> actionbars = new ArrayList<>();
-    private static final List<ProxiedPlayer> titles = new ArrayList<>();
+    private static final List<ProxiedPlayer> actionbars = new CopyOnWriteArrayList<>();
+    private static final List<ProxiedPlayer> titles = new CopyOnWriteArrayList<>();
     private static final DynamicBar bar = new DynamicBar("&fWaiting for a new attack!", BarColor.RED, BarStyle.SOLID);
 
     public static void automaticNotification(ProxiedPlayer player){

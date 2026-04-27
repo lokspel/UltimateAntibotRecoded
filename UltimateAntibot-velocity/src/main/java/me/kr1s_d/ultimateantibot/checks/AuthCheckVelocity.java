@@ -20,8 +20,8 @@ import me.kr1s_d.ultimateantibot.utils.ColorUtils;
 import me.kr1s_d.ultimateantibot.utils.component.KComponentBuilder;
 import net.kyori.adventure.text.Component;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
@@ -40,13 +40,13 @@ public class AuthCheckVelocity {
     public AuthCheckVelocity(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.antibotManager = plugin.getAntiBotManager();
-        this.checking = new HashMap<>();
-        this.completedCheck = new HashMap<>();
-        this.pingMap = new HashMap<>();
-        this.pingData = new HashMap<>();
-        this.failure = new HashMap<>();
-        this.runningTasks = new HashMap<>();
-        this.checkInitiator = new HashMap<>();
+        this.checking = new ConcurrentHashMap<>();
+        this.completedCheck = new ConcurrentHashMap<>();
+        this.pingMap = new ConcurrentHashMap<>();
+        this.pingData = new ConcurrentHashMap<>();
+        this.failure = new ConcurrentHashMap<>();
+        this.runningTasks = new ConcurrentHashMap<>();
+        this.checkInitiator = new ConcurrentHashMap<>();
         this.VPNService = plugin.getVPNService();
         plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
     }

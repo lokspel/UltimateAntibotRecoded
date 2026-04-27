@@ -6,16 +6,14 @@ import me.kr1s_d.ultimateantibot.common.objects.attack.AttackLog;
 import me.kr1s_d.ultimateantibot.common.utils.*;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class AttackTrackerService implements IService {
     private final IAntiBotPlugin plugin;
-    private List<AttackLog> attackLogList = new ArrayList<>();
+    private List<AttackLog> attackLogList = new CopyOnWriteArrayList<>();
     private AttackLog current;
     private int nextAttackID;
 

@@ -8,10 +8,10 @@ import me.kr1s_d.ultimateantibot.common.antivpn.proxycheck.ProxyCheckProvider;
 import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.utils.ConfigManger;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
 
 public class VPNService implements IService {
@@ -19,13 +19,13 @@ public class VPNService implements IService {
     private final IAntiBotPlugin plugin;
     private final LogHelper logHelper;
     private final List<String> underVerification;
-    private final Set<String> verified = new HashSet<>();
+    private final Set<String> verified = new CopyOnWriteArraySet<>();
 
     private int currentChecks;
     public VPNService(IAntiBotPlugin plugin){
         this.plugin = plugin;
         logHelper = plugin.getLogHelper();
-        this.underVerification = new ArrayList<>();
+        this.underVerification = new CopyOnWriteArrayList<>();
         this.currentChecks = 0;
         plugin.scheduleRepeatingTask(() -> {
             currentChecks = 0;

@@ -7,10 +7,11 @@ import me.kr1s_d.ultimateantibot.common.utils.ServerUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class CheckService {
-    private static final List<Check> checkList = new ArrayList<>();
+    private static final List<Check> checkList = new CopyOnWriteArrayList<>();
 
     public static void register(Check check) {
         checkList.add(check);

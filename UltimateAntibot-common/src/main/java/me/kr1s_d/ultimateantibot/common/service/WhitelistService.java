@@ -9,6 +9,7 @@ import me.kr1s_d.ultimateantibot.common.helper.LogHelper;
 import me.kr1s_d.ultimateantibot.common.objects.profile.entry.WhitelistEntry;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 public class WhitelistService implements IService {
     private final QueueService queueService;
@@ -21,7 +22,7 @@ public class WhitelistService implements IService {
         this.queueService = queueService;
         this.whitelist = Caffeine.newBuilder()
                 .build();
-        this.timedWhitelist = new HashSet<>();
+        this.timedWhitelist = new CopyOnWriteArraySet<>();
         this.whitelistConfig = whitelistConfig;
         this.logHelper = logHelper;
     }

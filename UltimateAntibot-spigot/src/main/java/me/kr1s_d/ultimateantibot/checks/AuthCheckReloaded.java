@@ -21,8 +21,8 @@ import org.bukkit.event.server.ServerListPingEvent;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class AuthCheckReloaded {
@@ -41,14 +41,14 @@ public class AuthCheckReloaded {
     public AuthCheckReloaded(IAntiBotPlugin plugin) {
         this.plugin = plugin;
         this.antiBotManager = plugin.getAntiBotManager();
-        this.checking = new HashMap<>();
-        this.completedCheck = new HashMap<>();
-        this.pingMap = new HashMap<>();
-        this.pingData = new HashMap<>();
-        this.failure = new HashMap<>();
+        this.checking = new ConcurrentHashMap<>();
+        this.completedCheck = new ConcurrentHashMap<>();
+        this.pingMap = new ConcurrentHashMap<>();
+        this.pingData = new ConcurrentHashMap<>();
+        this.failure = new ConcurrentHashMap<>();
         this.taskScheduler = Bukkit.getScheduler();
-        this.runningTasks = new HashMap<>();
-        this.checkInitiator = new HashMap<>();
+        this.runningTasks = new ConcurrentHashMap<>();
+        this.checkInitiator = new ConcurrentHashMap<>();
         this.VPNService = plugin.getVPNService();
         plugin.getLogHelper().debug("Loaded " + this.getClass().getSimpleName() + "!");
     }

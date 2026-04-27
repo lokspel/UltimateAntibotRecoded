@@ -3,14 +3,14 @@ package me.kr1s_d.ultimateantibot.common.service;
 import me.kr1s_d.ultimateantibot.common.core.detectors.AbstractDetector;
 import me.kr1s_d.ultimateantibot.common.objects.FancyInteger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DetectorService {
-    private static final List<AbstractDetector> DETECTORS = new ArrayList<>();
-    private static final Map<AbstractDetector, FancyInteger> TICKDATA = new HashMap<>();
+    private static final List<AbstractDetector> DETECTORS = new CopyOnWriteArrayList<>();
+    private static final Map<AbstractDetector, FancyInteger> TICKDATA = new ConcurrentHashMap<>();
 
     public static void tickDetectors() {
         for(AbstractDetector detector : DETECTORS) {
