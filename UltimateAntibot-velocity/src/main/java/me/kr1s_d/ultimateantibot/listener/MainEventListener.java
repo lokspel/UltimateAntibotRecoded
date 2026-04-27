@@ -168,13 +168,6 @@ public class MainEventListener {
             return;
         }
 
-        //
-        //FirstJoinCheck
-        //
-        if (firstJoinCheck.isDenied(ip, name)) {
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.firstJoinMessage)));
-            return;
-        }
     }
 
     @Subscribe

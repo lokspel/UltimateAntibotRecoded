@@ -173,14 +173,6 @@ public class MainEventListener implements Listener {
             return;
         }
 
-        //
-        //FirstJoinCheck
-        //
-        if (firstJoinCheck.isDenied(ip, name)) {
-            e.setCancelReason(KComponentBuilder.colorized(MessageManager.firstJoinMessage));
-            e.setCancelled(true);
-            return;
-        }
     }
 
     @EventHandler
