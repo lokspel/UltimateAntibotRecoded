@@ -89,6 +89,8 @@ public class MainEventListener implements Listener {
             return;
         }
         if (whitelistService.isWhitelisted(ip)) {
+            // Consume a pending first-join flag for whitelisted players without denying login.
+            firstJoinCheck.isDenied(ip, name);
             antiBotManager.getDynamicJoins().decrease();
             return;
         }
@@ -196,7 +198,9 @@ public class MainEventListener implements Listener {
         //
         //FirstJoin Check Fallback
         //
-        if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
+        if (whitelistService.isWhitelisted(ip) && userDataService.getProfile(ip).isFirstJoin()) {
+            userDataService.getProfile(ip).setFirstJoin(false);
+        } else if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
             userDataService.getProfile(ip).setFirstJoin(false);
             plugin.disconnect(ip, MessageManager.firstJoinMessage);
             return;
