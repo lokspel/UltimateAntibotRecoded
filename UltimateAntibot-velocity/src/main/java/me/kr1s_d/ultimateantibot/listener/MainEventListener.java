@@ -169,7 +169,7 @@ public class MainEventListener {
         //
         //FirstJoinCheck
         //
-        if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
+        if (firstJoinCheck.isDenied(ip, name)) {
             e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.firstJoinMessage)));
             return;
         }
