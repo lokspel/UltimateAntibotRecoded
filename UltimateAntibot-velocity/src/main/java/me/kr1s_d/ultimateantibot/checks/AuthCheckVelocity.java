@@ -143,7 +143,8 @@ public class AuthCheckVelocity {
      * @param ip IP to check
      * @return Ritorna se l'IP può iniziare una nuova task
      */
-    private boolean canStartTimerVerification(String ip) {
+    @SuppressWarnings("unused")
+	private boolean canStartTimerVerification(String ip) {
         return runningTasks.containsKey(ip);
     }
 

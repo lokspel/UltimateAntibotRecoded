@@ -73,7 +73,8 @@ public class UltimateAntiBotVelocity implements IAntiBotPlugin, IServerPlatform 
     private VPNService VPNService;
     private Notificator notificator;
     private UltimateAntiBotCore core;
-    private SatelliteServer satellite;
+    @SuppressWarnings("unused")
+	private SatelliteServer satellite;
     private boolean isRunning;
 
     @Inject

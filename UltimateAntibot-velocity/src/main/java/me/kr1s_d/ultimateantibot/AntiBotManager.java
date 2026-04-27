@@ -306,6 +306,8 @@ public class AntiBotManager implements IAntiBotManager {
             case PING:
                 enablePingMode();
                 break;
+			default:
+				break;
         }
     }
 

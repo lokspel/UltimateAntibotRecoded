@@ -1,5 +1,6 @@
 package me.kr1s_d.ultimateantibot.listener;
 
+import com.velocitypowered.api.event.EventTask;
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
@@ -33,7 +34,8 @@ public class MainEventListener {
     private final QueueService queueService;
     private final WhitelistService whitelistService;
     private final BlackListService blackListService;
-    private final FirstJoinCheck firstJoinCheck;
+    @SuppressWarnings("unused")
+	private final FirstJoinCheck firstJoinCheck;
     private final NameChangerCheck nameChangerCheck;
     private final SuperJoinCheck superJoinCheck;
     private final AuthCheckVelocity authCheck;
@@ -67,178 +69,174 @@ public class MainEventListener {
         new ConnectionAnalyzerCheck(plugin);
     }
 
-    @Subscribe(order = PostOrder.FIRST)
-    public void onPreLoginEvent(PreLoginEvent e) {
-        //e.registerIntent(UltimateAntiBotBungeeCord.getInstance());
-        String ip = Utils.getIP(e.getConnection().getRemoteAddress());
-        String name = e.getUsername();
-        int totals = blackListService.size() + queueService.size();
-        if (blackListService.size() != 0 && totals != 0) {
-            ServerUtil.blacklistPercentage = Math.round((float) blackListService.size() / totals * 100);
-        }
-        antiBotManager.increaseJoinPerSecond();
-
-        //anti crash on attack start for first 5s
-        if((System.currentTimeMillis() - ServerUtil.lastStartAttack) < 5000) {
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(Utils.colora(MessageManager.fastJoinQueueMessage)));
-            return;
-        }
-
-        //
-        //BlackList & Whitelist Checks
-        //
-        if (blackListService.isBlackListed(ip)) {
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
-            return;
-        }
-        if (whitelistService.isWhitelisted(ip)) {
-            antiBotManager.getDynamicJoins().decrease();
-            return;
-        }
-
-        //
-        //AntiBotMode Enable
-        //
-        if (antiBotManager.getSpeedJoinPerSecond() >= ConfigManger.antiBotModeTrigger) {
-            if (!antiBotManager.isAntiBotModeEnabled()) {
-                antiBotManager.enableAntiBotMode();
-                e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage)))));
-                return;
-            }
-        }
-
-        //
-        // NameChangerCheck
-        //
-        if (nameChangerCheck.isDenied(ip, name)) {
-            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
-            return;
-        }
-
-        //
-        //Queue Service
-        //
-        if (!queueService.isQueued(ip) && !blackListService.isBlackListed(ip) && !whitelistService.isWhitelisted(ip)) {
-            queueService.queue(ip);
-        }
-
-        //
-        //Legal Name Check
-        //
-        if (legalNameCheck.isDenied(ip, name)) {
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
-            return;
-        }
-
-        //
-        // Invalid Name Check
-        //
-        if (invalidNameCheck.isDenied(ip, name)) {
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
-            return;
-        }
-
-        //
-        // SuperJoinCheck
-        //
-        if (superJoinCheck.isDenied(ip, name)) {
-            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_JOINS, name);
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
-            return;
-        }
-
-        //
-        //Auth Check
-        //
-        if (ServerUtil.blacklistPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled()) {
-            authCheck.onJoin(e, ip);
-            return;
-        }
-
-        //
-        //AntiBotMode Normal
-        //
-        if (antiBotManager.isAntiBotModeEnabled() || antiBotManager.isSlowAntiBotModeEnabled()) {
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(
-                    MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage))
-            )));
-            return;
-        }
-
-        //
-        //FirstJoinCheck
-        //
-        if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
-            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.firstJoinMessage)));
-            return;
-        }
+	@SuppressWarnings("deprecation")
+	@Subscribe(async = true, order = PostOrder.FIRST)
+    public EventTask onPreLoginEvent(PreLoginEvent e) {
+		return EventTask.withContinuation(intent -> {
+			try {
+		        String ip = Utils.getIP(e.getConnection().getRemoteAddress());
+		        String name = e.getUsername();
+		        int totals = blackListService.size() + queueService.size();
+		        if (blackListService.size() != 0 && totals != 0) {
+		            ServerUtil.blacklistPercentage = Math.round((float) blackListService.size() / totals * 100);
+		        }
+		        antiBotManager.increaseJoinPerSecond();
+		
+		        //anti crash on attack start for first 5s
+		        if((System.currentTimeMillis() - ServerUtil.lastStartAttack) < 5000) {
+		            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(Utils.colora(MessageManager.fastJoinQueueMessage)));
+		            return;
+		        }
+		
+		        //
+		        //BlackList & Whitelist Checks
+		        //
+		        if (blackListService.isBlackListed(ip)) {
+		            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
+		            return;
+		        }
+		        if (whitelistService.isWhitelisted(ip)) {
+		            antiBotManager.getDynamicJoins().decrease();
+		            return;
+		        }
+		
+		        //
+		        //AntiBotMode Enable
+		        //
+		        if (antiBotManager.getSpeedJoinPerSecond() >= ConfigManger.antiBotModeTrigger) {
+		            if (!antiBotManager.isAntiBotModeEnabled()) {
+		                antiBotManager.enableAntiBotMode();
+		                e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage)))));
+		                return;
+		            }
+		        }
+		
+		        //
+		        // NameChangerCheck
+		        //
+		        if (nameChangerCheck.isDenied(ip, name)) {
+		            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_NAMES, name);
+		            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
+		            return;
+		        }
+		
+		        //
+		        //Queue Service
+		        //
+		        if (!queueService.isQueued(ip) && !blackListService.isBlackListed(ip) && !whitelistService.isWhitelisted(ip)) {
+		            queueService.queue(ip);
+		        }
+		
+		        //
+		        //Legal Name Check
+		        //
+		        if (legalNameCheck.isDenied(ip, name)) {
+		            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
+		            return;
+		        }
+		
+		        //
+		        // Invalid Name Check
+		        //
+		        if (invalidNameCheck.isDenied(ip, name)) {
+		            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
+		            return;
+		        }
+		
+		        //
+		        // SuperJoinCheck
+		        //
+		        if (superJoinCheck.isDenied(ip, name)) {
+		            blackListService.blacklist(ip, BlackListReason.TOO_MUCH_JOINS, name);
+		            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(blacklistMSG(ip)));
+		            return;
+		        }
+		
+		        //
+		        //Auth Check
+		        //
+		        if (ServerUtil.blacklistPercentage >= ConfigManger.authPercent && antiBotManager.isAntiBotModeEnabled()) {
+		            authCheck.onJoin(e, ip);
+		            return;
+		        }
+		
+		        //
+		        //AntiBotMode Normal
+		        //
+		        if (antiBotManager.isAntiBotModeEnabled() || antiBotManager.isSlowAntiBotModeEnabled()) {
+		            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(
+		                    MessageManager.getAntiBotModeMessage(String.valueOf(ConfigManger.authPercent), String.valueOf(ServerUtil.blacklistPercentage))
+		            )));
+		            return;
+		        }
+		
+		        //
+		        //FirstJoinCheck
+		        //
+		        if (firstJoinCheck.isDenied(ip, name)) {
+		            e.setResult(PreLoginEvent.PreLoginComponentResult.denied(KComponentBuilder.colorized(MessageManager.firstJoinMessage)));
+		            return;
+		        }
+			} finally {
+				intent.resume();
+			}
+		});
     }
 
     @Subscribe
-    public void onPostLoginEvent(PostLoginEvent e) {
-        Player player = e.getPlayer();
-        String nickname = player.getUsername();
-        String ip = Utils.getIP(player);
-        //
-        //BlackList Check Fallback
-        //
-        if (blackListService.isBlackListed(ip)) {
-            plugin.disconnect(ip, MessageManager.getBlacklistedMessage(blackListService.getProfile(ip)));
-            return;
-        }
-
-        //
-        //FirstJoin Check Fallback
-        //
-        if (ConfigManger.isFirstJoinEnabled && userDataService.getProfile(ip).isFirstJoin()) {
-            userDataService.getProfile(ip).setFirstJoin(false);
-            plugin.disconnect(ip, MessageManager.firstJoinMessage);
-            return;
-        }
-        //
-        //Packet Check
-        //
-        packetCheck.registerJoin(ip);
-        //
-        //connection profiles
-        //
-        userDataService.registerJoin(ip, nickname);
-        //
-        //Account Check
-        //
-        if (accountCheck.isDenied(ip, nickname)) {
-            plugin.disconnect(ip, MessageManager.getAccountOnlineMessage());
-            return;
-        }
-        //
-        //SlowJoin check
-        //
-        if (slowJoinCheck.isDenied(ip, nickname)) {
-            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER_SLOW_JOIN, nickname);
-            plugin.disconnect(ip, MessageManager.getSafeModeMessage());
-            return;
-        }
-
-        //If isn't whitelisted
-        if (!antiBotManager.getWhitelistService().isWhitelisted(ip)) {
-            //Add to last join
-            antiBotManager.getJoinCache().addJoined(ip);
-            //Auto Whitelist Task
-            plugin.scheduleDelayedTask(new AutoWhitelistTask(plugin, ip), false, 1000L * ConfigManger.playtimeForWhitelist * 60L);
-            //Remove from JoinCache after 30 Seconds (committed since cache added auto removal in JoinCache)
-            //plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip), false, 1000L * 30);
-            //
-            //Connection check (ProxyCheck.io or ip-api.com)
-            //
-            if (!player.hasPermission("uab.bypass.vpn")) {
-                VPNService.submitIP(ip, nickname);
-            }
-        }
-        //Notification
-        if (player.hasPermission("uab.notification.automatic") && antiBotManager.isSomeModeOnline()) {
-            Notificator.automaticNotification(player);
-        }
+    public EventTask onPostLoginEvent(PostLoginEvent e) {
+    	return EventTask.withContinuation(intent -> {
+    		try {
+		        Player player = e.getPlayer();
+		        String nickname = player.getUsername();
+		        String ip = Utils.getIP(player);
+		        //
+		        //Packet Check
+		        //
+		        packetCheck.registerJoin(ip);
+		        //
+		        //connection profiles
+		        //
+		        userDataService.registerJoin(ip, nickname);
+		        //
+		        //Account Check
+		        //
+		        if (accountCheck.isDenied(ip, nickname)) {
+		            plugin.disconnect(ip, MessageManager.getAccountOnlineMessage());
+		            return;
+		        }
+		        //
+		        //SlowJoin check
+		        //
+		        if (slowJoinCheck.isDenied(ip, nickname)) {
+		            blackListService.blacklist(ip, BlackListReason.STRANGE_PLAYER_SLOW_JOIN, nickname);
+		            plugin.disconnect(ip, MessageManager.getSafeModeMessage());
+		            return;
+		        }
+		
+		        //If isn't whitelisted
+		        if (!antiBotManager.getWhitelistService().isWhitelisted(ip)) {
+		            //Add to last join
+		            antiBotManager.getJoinCache().addJoined(ip);
+		            //Auto Whitelist Task
+		            plugin.scheduleDelayedTask(new AutoWhitelistTask(plugin, ip), false, 1000L * ConfigManger.playtimeForWhitelist * 60L);
+		            //Remove from JoinCache after 30 Seconds (committed since cache added auto removal in JoinCache)
+		            //plugin.scheduleDelayedTask(() -> antiBotManager.getJoinCache().removeJoined(ip), false, 1000L * 30);
+		            //
+		            //Connection check (ProxyCheck.io or ip-api.com)
+		            //
+		            if (!player.hasPermission("uab.bypass.vpn")) {
+		                VPNService.submitIP(ip, nickname);
+		            }
+		        }
+		        //Notification
+		        if (player.hasPermission("uab.notification.automatic") && antiBotManager.isSomeModeOnline()) {
+		            Notificator.automaticNotification(player);
+		        }
+			} finally {
+				intent.resume();
+			}
+    	});
     }
 
     @Subscribe

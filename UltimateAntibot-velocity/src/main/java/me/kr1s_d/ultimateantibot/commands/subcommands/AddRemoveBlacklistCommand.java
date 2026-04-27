@@ -12,7 +12,6 @@ import me.kr1s_d.ultimateantibot.common.utils.StringUtil;
 import me.kr1s_d.ultimateantibot.utils.Utils;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 public class AddRemoveBlacklistCommand implements SubCommand {
 
